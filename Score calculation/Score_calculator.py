@@ -22,7 +22,7 @@ def Focus(score):
         return 100
 
 
-def Score_calculator(Fatigue, Survey, Memory, Focus):
+def Score_calculator(Fatigue, Survey, Memory, Focus):       # All parameters are percentages
     Weights = {'Memory':0.2, 'Focus': 0.2, 'Fatigue': 0.5, 'Survey': 0.1}        
     Value = {'Memory':Memory, 'Focus': Focus, 'Fatigue': Fatigue, 'Survey': Survey} # percentages
  
@@ -44,4 +44,5 @@ POM = 80
 PERLOS = 50
 n = 17
 score = 2
-print(Score_calculator(Fatigue_Calculator(POM, PERLOS), 30, Memory(n), Focus(score)))
+Rate = 8
+print(Score_calculator(Fatigue_Calculator(POM, PERLOS), Rate * 10, Memory(n), Focus(score)))
