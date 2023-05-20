@@ -24,7 +24,7 @@ const VideoRecorder = () => {
     };
   }, [recording, timer]);
 
-  const startRecording = () => {
+const startRecording = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ video: true })
@@ -35,38 +35,36 @@ const VideoRecorder = () => {
           setTimer(15); // Reset the timer when starting a new recording
 
           // Create a new MediaRecorder instance
-          mediaRecorderRef.current = new MediaRecorder(stream);
-          const chunks = [];
+          mediaRecorderRef.current = new MediaRecorder(stream, {
+            mimeType: 'video/webm; codecs=vp9',
+            videoBitsPerSecond: 2500000,
+          });
+
+          let recordedChunks = [];
 
           // Store recorded data chunks
           mediaRecorderRef.current.ondataavailable = (event) => {
             if (event.data.size > 0) {
-              chunks.push(event.data);
+              recordedChunks.push(event.data);
             }
           };
 
           // When recording stops, save the recorded file
           mediaRecorderRef.current.onstop = () => {
-            const blob = new Blob(chunks, { type: "video/webm" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.style = "display: none";
-            a.href = url;
-            a.download = "recorded-video.webm";
-            a.click();
-            window.URL.revokeObjectURL(url);
+            const fullBlob = new Blob(recordedChunks, { type: 'video/webm' });
+            uploadVideo(fullBlob); // Pass the fullBlob to the uploadVideo function
+            recordedChunks = [];
           };
 
           // Start recording
           mediaRecorderRef.current.start();
         })
         .catch((error) => {
-          console.error("Error accessing camera: ", error);
+          console.error('Error accessing camera: ', error);
         });
     }
   };
-
+  
   const stopRecording = () => {
     if (
       mediaRecorderRef.current &&
@@ -79,25 +77,16 @@ const VideoRecorder = () => {
     uploadVideo();
   };
 
-  const uploadVideo = async () => {
-    const videoBlob = await fetch(videoRef.current.srcObject)
-      .then((res) => res.blob())
-      .catch((error) => {
-        console.error("Error converting video stream to blob: ", error);
-      });
-
+  const uploadVideo = async (blob) => {
     const formData = new FormData();
-    formData.append("video", videoBlob);
+    formData.append('video', blob);
 
-    axios
-      .post("/api/process-video", formData)
-      .then((response) => {
-        // Handle response from backend API
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error("Error uploading video: ", error);
-      });
+    try {
+      await axios.post('http://127.0.0.1:5000/api/upload', formData);
+      console.log('Video uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading video:', error);
+    }
   };
 
   return (
