@@ -26,7 +26,7 @@ const VideoRecorder = () => {
     };
   }, [recording, timer]);
 
-const startRecording = () => {
+  const startRecording = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ video: true })
@@ -69,7 +69,7 @@ const startRecording = () => {
         });
     }
   };
-  
+
   const stopRecording = () => {
     if (
       mediaRecorderRef.current &&
