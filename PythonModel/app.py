@@ -35,6 +35,9 @@ def upload_video():
     temp = main()
     print(f'perlos is{temp[0]}')
     print(f'pom is{temp[1]}')
+
+
+   
     return 'Video merged and saved successfully!'
 
     # # Merge the video
@@ -60,6 +63,18 @@ def upload_video():
     # os.remove(video_path)
 
 
+@app.route('/api/turns', methods=['POST'])
+def upload_turns():
+    turns = request.json['turns']
+    print(turns)
+    return 'Turns uploaded successfully!'
+
+
+@app.route('/api/reactTime', methods=['Post'])
+def upload_reactTime():
+    reactTime = request.json['reactTime']
+    print(reactTime)
+    return 'ReactTime uploaded successfully!'
 
 
 

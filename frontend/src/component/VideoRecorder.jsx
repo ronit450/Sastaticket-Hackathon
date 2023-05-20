@@ -7,8 +7,6 @@ const VideoRecorder = () => {
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [timer, setTimer] = useState(15);
-  const [showText, setShowText] = useState(false);
-  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     let intervalId;
@@ -60,9 +58,6 @@ const startRecording = () => {
 
           // Start recording
           mediaRecorderRef.current.start();
-          setRecording(true);
-          setTimer(15); // Reset the timer when starting a new recording
-          setShowText(true); // Display additional text while recording
         })
         .catch((error) => {
           console.error('Error accessing camera: ', error);
@@ -80,8 +75,6 @@ const startRecording = () => {
     videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
     setRecording(false);
     uploadVideo();
-    setShowText(false); // Hide additional text after recording is complete
-    setShowButton(true); // Show button to move to the next step
   };
 
   const uploadVideo = async (blob) => {
@@ -98,19 +91,6 @@ const startRecording = () => {
 
   return (
     <div className="video-recorder-container">
-      <h2 className="video-recorder-title">Welcome to Video Recorder</h2>
-      <p className="video-recorder-instructions">
-        Click the "Start Recording" button below to start recording a video.
-        Please ensure your camera is enabled. You will have 15 seconds of
-        recording time.
-      </p>
-
-      {showText && (
-        <p className="video-recorder-text">
-          Please stay attentive while recording...
-        </p>
-      )}
-
       <video ref={videoRef} className="video-recorder-video" />
 
       {!recording ? (
@@ -125,8 +105,6 @@ const startRecording = () => {
           </button>
         </>
       )}
-
-      {showButton && <button className="next-button">Next Step</button>}
     </div>
   );
 };

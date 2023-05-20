@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "./MindGame.css";
 import SingleCard from "./SingleCard";
+import axios from "axios";
+
 
 // import helmetImage from "../assets/helmet-1.png";
 import Passport from "../assets/Passport.png";
@@ -38,6 +40,19 @@ function MindGame() {
     setTurns(0);
   };
 
+
+
+
+  const uploadTurns = async (turns) => {
+    try {
+      await axios.post('http://127.0.0.1:5000/api/turns', { turns });
+      console.log('Turns uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading turns:', error);
+    }
+  };
+
+
   // handle a choice
   const handleChoice = (card) => {
     console.log(card);
@@ -63,8 +78,20 @@ function MindGame() {
       } else {
         setTimeout(() => resetTurn(), 1000);
       }
+
     }
+
   }, [choiceOne, choiceTwo]);
+
+
+
+  useEffect(() => {
+  if (cards.every((card) => card.matched)) {
+    console.log("Game Over");
+    console.log(turns);
+    uploadTurns(turns);
+  }
+  }, [cards, turns]);
 
   // reset choices & increase turn
   const resetTurn = () => {
@@ -73,6 +100,7 @@ function MindGame() {
     setTurns((prevTurns) => prevTurns + 1);
     setDisabled(false);
   };
+
 
   // start new game automagically
   useEffect(() => {
