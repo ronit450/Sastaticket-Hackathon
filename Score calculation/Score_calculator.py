@@ -10,7 +10,7 @@ def Fatigue_Calculator(POM, PERLOS):     # percentage open mouth, percentage eye
 def Memory(n):      # n = no.of Turns
     if n == 6:
         return 0
-    elif n > 6 & n < 16:
+    elif n > 6 and n < 16:
         return 10*(n-6)
     else:    # n > 16
         return 100
