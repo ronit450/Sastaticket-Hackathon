@@ -10,26 +10,26 @@ from openpyxl.workbook import Workbook
 from tensorflow import keras 
 import argparse
 from flask import request
-from flask import Flask
+# from flask import Flask
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
 
 
-@app.route('/analyze-video', methods=['POST'])
-def analyze_video():
-    video_data = request.json['video']
+# @app.route('/analyze-video', methods=['POST'])
+# def analyze_video():
+#     video_data = request.json['video']
 
-    # Call your Python model or processing function here
-    # Perform analysis on the video data and get the desired results
+#     # Call your Python model or processing function here
+#     # Perform analysis on the video data and get the desired results
 
-    # Return the results as a JSON response
-    results = {
-        'result1': '...',
-        'result2': '...',
-        # Add more results as needed
-    }
-    return results
+#     # Return the results as a JSON response
+#     results = {
+#         'result1': '...',
+#         'result2': '...',
+#         # Add more results as needed
+#     }
+#     return results
 
 
 #FUNCTIONS
@@ -90,7 +90,7 @@ def detect(frame,net,ln):
             # filter out weak predictions by ensuring the detected (based on threshold of 0.4) -- threshold can be changed 
             if confidence > 0.4:
                 # scale the bounding box coordinates back relative to the size of the image
-                box = detection[0:4] * np.array([W, H, W, H])
+                box = detection[0:4] * np.array([0,0,0,0])
                 (centerX, centerY, width, height) = box.astype("int")
                 # use the center (x, y) coordinates to derive the top
                 # and and left corner of the bounding box
@@ -204,6 +204,52 @@ def calculatePOM(mouthOpen, totalTime):
 
 
 def run_yolo(lag_val,eye_lag_val,yawn_lag_val):
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-p", "--path", type=str,
+                    default="temp_video.avi",
+                    help="path video for testing")
+    args = vars(ap.parse_args())
+    # configure models
+    ln, net, labels = config_yolo()
+    LSTM_model, LSTM_eye, LSTM_yawn = config_LSTM()
+    # colours for displaying boudning boxes
+    COLORS = [[0, 0, 255], [0, 255, 0], [255, 0, 0], [25, 217, 67], [225, 225, 77]]
+
+    # variables to store height and width of frame
+    W = None
+    H = None
+
+    print("opening video stream...")
+    # open video
+    vs = cv2.VideoCapture(args["path"] if args["path"] else 0)
+    # for writing to output file
+    writer = None
+    # calculates frames per second
+    fps = FPS().start()
+
+    # variables to count eye and mouth close time
+    eye_closed_count = 0
+    mouth_open_count = 0
+
+    # counts frame
+    frame_count = 0
+
+    start_eye = time.time()
+
+
+    start_mouth = time.time()
+    # variables that will store how long eyes are closed and mouth is open
+    eye_closed_sec = 0
+    mouth_open_sec = 0
+    # will store result of LSTM model
+    fatigue_result = None
+    yawn_result = None
+    eye_close_result = None
+    # create an empty list to store YOLO output that will be fed into LSTM
+    LSTM_input = []
+    LSTM_eye_input = []
+    LSTM_yawn_input = []
+
     eyesClosedLst = []
     mouthOpenLst = []
     """
@@ -212,7 +258,7 @@ def run_yolo(lag_val,eye_lag_val,yawn_lag_val):
     """
     while True:
         #declare global variables 
-        global frame_count,W,H,writer,eye_closed_count,mouth_open_count,mouth_open_sec,eye_closed_sec,LSTM_input,fatigue_result,start_eye,start_mouth,yawn_result,eye_close_result,LSTM_eye_input,LSTM_yawn_input
+        # global frame_count,W,H,writer,eye_closed_count,mouth_open_count,mouth_open_sec,eye_closed_sec,LSTM_input,fatigue_result,start_eye,start_mouth,yawn_result,eye_close_result,LSTM_eye_input,LSTM_yawn_input
         # read frame
         (grabbed, frame) = vs.read()
         # if no frame, video is over 
@@ -248,45 +294,45 @@ def run_yolo(lag_val,eye_lag_val,yawn_lag_val):
                 mouthOpenLst.append(mouth_open_sec)
             mouth_open_sec=0
         # every 5 frames monitior eye and mouth clourse times 
-        if frame_count%5==0:
-            #append into list for LSTM data  
-            LSTM_input.append(float(eye_closed_count))
-            LSTM_input.append(float(mouth_open_count))
-            LSTM_eye_input.append(float(eye_closed_count))
-            LSTM_yawn_input.append(float(mouth_open_count))
-            #DETECT FATIGUE
-            # if the YOLo model has supplied enough results for fatigue detection 
-            if len(LSTM_input)==(lag_val*2):
-                # send to LSTM model to predict
-                fatigue_result=predict_fatigue(LSTM_input,lag_val)
-            #if the YOLO model has supplied more than the number of previous values required
-            if len(LSTM_input)>(lag_val*2):
-                #reterive only the most recent ones - creates a sliding window effect
-                LSTM_input=LSTM_input[2:]
-                # send to LSTM model for prediction
-                fatigue_result=predict_fatigue(LSTM_input,lag_val)
-            #EYE CLOSURE PREDICTION
-            #if enough values have been obtained for eye closure detection 
-            if len(LSTM_eye_input)==eye_lag_val:
-                #send to model 
-                eye_close_result=predict_eye(LSTM_eye_input,eye_lag_val)
-            #if YOLO model has supplied more than the number of previous values needed
-            if len(LSTM_eye_input)>eye_lag_val:
-                #use only recent one - creates sliding window 
-                LSTM_eye_input=LSTM_eye_input[1:]
-                #send to LSTM model 
-                eye_close_result=predict_eye(LSTM_eye_input,eye_lag_val)
-            #YAWN PREDICTION
-            #if enough values have been obtained for yawn detection 
-            if len(LSTM_yawn_input)==yawn_lag_val:
-                #send to model 
-                yawn_result=predict_yawn(LSTM_yawn_input,yawn_lag_val)
-            #if YOLO model has supplied more than the number of previous values needed
-            if len(LSTM_yawn_input)>yawn_lag_val:
-                #use only recent one - creates sliding window 
-                LSTM_yawn_input=LSTM_yawn_input[1:]
-                #send to LSTM model 
-                yawn_result=predict_yawn(LSTM_yawn_input,yawn_lag_val)
+        # if frame_count%5==0:
+        #     #append into list for LSTM data  
+        #     LSTM_input.append(float(eye_closed_count))
+        #     LSTM_input.append(float(mouth_open_count))
+        #     LSTM_eye_input.append(float(eye_closed_count))
+        #     LSTM_yawn_input.append(float(mouth_open_count))
+        #     #DETECT FATIGUE
+        #     # if the YOLo model has supplied enough results for fatigue detection 
+        #     if len(LSTM_input)==(lag_val*2):
+        #         # send to LSTM model to predict
+        #         fatigue_result=predict_fatigue(LSTM_input,lag_val)
+        #     #if the YOLO model has supplied more than the number of previous values required
+        #     if len(LSTM_input)>(lag_val*2):
+        #         #reterive only the most recent ones - creates a sliding window effect
+        #         LSTM_input=LSTM_input[2:]
+        #         # send to LSTM model for prediction
+        #         fatigue_result=predict_fatigue(LSTM_input,lag_val)
+        #     #EYE CLOSURE PREDICTION
+        #     #if enough values have been obtained for eye closure detection 
+        #     if len(LSTM_eye_input)==eye_lag_val:
+        #         #send to model 
+        #         eye_close_result=predict_eye(LSTM_eye_input,eye_lag_val)
+        #     #if YOLO model has supplied more than the number of previous values needed
+        #     if len(LSTM_eye_input)>eye_lag_val:
+        #         #use only recent one - creates sliding window 
+        #         LSTM_eye_input=LSTM_eye_input[1:]
+        #         #send to LSTM model 
+        #         eye_close_result=predict_eye(LSTM_eye_input,eye_lag_val)
+        #     #YAWN PREDICTION
+        #     #if enough values have been obtained for yawn detection 
+        #     if len(LSTM_yawn_input)==yawn_lag_val:
+        #         #send to model 
+        #         yawn_result=predict_yawn(LSTM_yawn_input,yawn_lag_val)
+        #     #if YOLO model has supplied more than the number of previous values needed
+        #     if len(LSTM_yawn_input)>yawn_lag_val:
+        #         #use only recent one - creates sliding window 
+        #         LSTM_yawn_input=LSTM_yawn_input[1:]
+        #         #send to LSTM model 
+        #         yawn_result=predict_yawn(LSTM_yawn_input,yawn_lag_val)
             # reset eye and mouth closure count for next window 
             eye_closed_count=0
             mouth_open_count=0
@@ -296,16 +342,16 @@ def run_yolo(lag_val,eye_lag_val,yawn_lag_val):
         #else:
             #text4=None
         #display eye and mouth closure times and the LSTM model prediction 
-        text1 = "Eye closure time: %.4f" % (eye_closed_sec)
-        text2="Mouth Open time: %.4f" % (mouth_open_sec)
-        text3="Fatigue Level: %s" % (fatigue_result)
-        text4 = "Total eye closed time till now: %.4f" % (sum(eyesClosedLst))
-        text5 = "Total mouth open time till now: %.4f" % (sum(mouthOpenLst))
-        cv2.putText(frame,text1, (0, 20), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
-        cv2.putText(frame,text2, (0, 50), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
-        cv2.putText(frame,text3, (W-250, 20), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
-        cv2.putText(frame, text4, (0, 80), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
-        cv2.putText(frame, text5, (0, 110), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
+        # text1 = "Eye closure time: %.4f" % (eye_closed_sec)
+        # text2="Mouth Open time: %.4f" % (mouth_open_sec)
+        # text3="Fatigue Level: %s" % (fatigue_result)
+        # text4 = "Total eye closed time till now: %.4f" % (sum(eyesClosedLst))
+        # text5 = "Total mouth open time till now: %.4f" % (sum(mouthOpenLst))
+        # cv2.putText(frame,text1, (0, 20), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
+        # cv2.putText(frame,text2, (0, 50), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
+        # cv2.putText(frame,text3, (W-250, 20), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
+        # cv2.putText(frame, text4, (0, 80), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
+        # cv2.putText(frame, text5, (0, 110), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
         #if text4 is not None:
             #if yawn detected display it 
             #cv2.putText(frame,text4, (W-250, 60), cv2.FONT_HERSHEY_SIMPLEX,0.65,[255,255,255], 1)
@@ -327,11 +373,11 @@ def run_yolo(lag_val,eye_lag_val,yawn_lag_val):
                 cv2.putText(frame, text, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX,0.5, color, 1)
 
         #show the output frame
-        cv2.imshow("Frame", frame)
-        key = cv2.waitKey(1) & 0xFF
+        # cv2.imshow("Frame", frame)
+        # key = cv2.waitKey(1) & 0xFF
         # if the esc key was pressed, break from the loop
-        if key == 27:
-            break
+        # if key == 27:
+            # break
         # if an output video file path has been supplied and the video
         if writer is None:
             # initialize our video writer
@@ -349,62 +395,73 @@ def run_yolo(lag_val,eye_lag_val,yawn_lag_val):
         start_mouth = time.time()
     # stop the timer and display FPS information
     fps.stop()
+
+    perlos = calculatePERLOS(sum(eyesClosedLst), fps.elapsed())
+    pom = calculatePOM(sum(mouthOpenLst), fps.elapsed())
+
     print("elasped time: {:.2f}".format(fps.elapsed()))
     print("approx. FPS: {:.2f}".format(fps.fps()))
-    print(f'PERLOS = {calculatePERLOS(sum(eyesClosedLst), fps.elapsed())}')
-    print(f'POM = {calculatePOM(sum(mouthOpenLst), fps.elapsed())}')
+    # print(f'PERLOS = {calculatePERLOS(sum(eyesClosedLst), fps.elapsed())}')
+    # print(f'POM = {calculatePOM(sum(mouthOpenLst), fps.elapsed())}')
 
+    return (perlos, pom)
+    
 
+def main():
+    (perlos, pom) = run_yolo(200,6,10)
+    return (perlos, pom)
 
 
 # def main():
 #create argument parser 
-ap = argparse.ArgumentParser()
-ap.add_argument("-p", "--path", type=str,
-	default="2.avi",
-	help="path video for testing")
-args = vars(ap.parse_args())
-#configure models
-ln,net,labels=config_yolo()
-LSTM_model,LSTM_eye,LSTM_yawn=config_LSTM()
-#colours for displaying boudning boxes
-COLORS = [[0,0,255],[0,255,0],[255,0,0],[25,217,67],[225,225,77]]
+# ap = argparse.ArgumentParser()
+# ap.add_argument("-p", "--path", type=str,
+# 	default="temp_video.avi",
+# 	help="path video for testing")
+# args = vars(ap.parse_args())
+# #configure models
+# ln,net,labels=config_yolo()
+# LSTM_model,LSTM_eye,LSTM_yawn=config_LSTM()
+# #colours for displaying boudning boxes
+# COLORS = [[0,0,255],[0,255,0],[255,0,0],[25,217,67],[225,225,77]]
 
-#variables to store height and width of frame 
-W = None
-H = None
+# #variables to store height and width of frame 
+# W = None
+# H = None
 
-print("opening video stream...")
-# open video 
-vs = cv2.VideoCapture(args["path"] if args["path"] else 0)
-# for writing to output file
-writer = None
-# calculates frames per second 
-fps = FPS().start()
+# print("opening video stream...")
+# # open video 
+# vs = cv2.VideoCapture(args["path"] if args["path"] else 0)
+# # for writing to output file
+# writer = None
+# # calculates frames per second 
+# fps = FPS().start()
 
-#variables to count eye and mouth close time 
-eye_closed_count=0
-mouth_open_count=0
+# #variables to count eye and mouth close time 
+# eye_closed_count=0
+# mouth_open_count=0
 
-# counts frame 
-frame_count=0
+# # counts frame 
+# frame_count=0
 
 
 
 #create a timer value for eye and mouth closure times 
-start_eye = time.time()
-start_mouth = time.time()
-#variables that will store how long eyes are closed and mouth is open
-eye_closed_sec=0
-mouth_open_sec=0
-#will store result of LSTM model 
-fatigue_result=None
-yawn_result=None
-eye_close_result=None
-#create an empty list to store YOLO output that will be fed into LSTM 
-LSTM_input=[]
-LSTM_eye_input=[]
-LSTM_yawn_input=[]
+# start_eye = time.time()
+# start_mouth = time.time()
+# #variables that will store how long eyes are closed and mouth is open
+# eye_closed_sec=0
+# mouth_open_sec=0
+# #will store result of LSTM model 
+# fatigue_result=None
+# yawn_result=None
+# eye_close_result=None
+# #create an empty list to store YOLO output that will be fed into LSTM 
+# LSTM_input=[]
+# LSTM_eye_input=[]
+# LSTM_yawn_input=[]
 
 # run the YOLO model which will calls the LSTM model 
-run_yolo(200,6,10)
+# run_yolo(200,6,10)
+# temp = main()
+# print(temp)
