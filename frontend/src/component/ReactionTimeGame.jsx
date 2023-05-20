@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./ReactionTimeGame.css";
+import axios from "axios";
 
 const ReactionTimeGame = () => {
   const gridSize = 3; // Grid size set to 3x3
@@ -58,6 +59,14 @@ const ReactionTimeGame = () => {
         clearTimeout(timeout);
       };
     }
+    else
+    {
+      let react = (reactionTime + missedTime)/(totalDelay-1);
+      react = react / 1000;
+      console.log(react);
+      uploadReaction(react);
+      // console.log("Game Over");
+    }
   }, [redDotIndex, gameOver]);
 
   const handleBoxClick = (index) => {
@@ -70,6 +79,16 @@ const ReactionTimeGame = () => {
       setRedDotIndex(-1);
     } else {
       setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
+    }
+  };
+
+  
+  const uploadReaction = async (reaction) => {
+    try {
+      await axios.post('http://127.0.0.1:5000/api/reaction', { reaction });
+      console.log('Reaction uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading turns:', error);
     }
   };
 

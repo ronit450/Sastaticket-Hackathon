@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import "./VideoRecorder.scss";
+import "./VideoRecorder.css";
 
 const VideoRecorder = () => {
   const videoRef = useRef(null);
@@ -91,7 +91,19 @@ const VideoRecorder = () => {
 
   return (
     <div className="video-recorder-container">
-      <video ref={videoRef} className="video-recorder-video" />
+      <div className="circular-frame">
+        <video ref={videoRef} className="video-recorder-video" />
+        {recording && (
+          <div className="circular-progress">
+            <div
+              className="progress-bar"
+              style={{
+                animationDuration: `${timer}s`,
+              }}
+            />
+          </div>
+        )}
+      </div>
 
       {!recording ? (
         <button className="video-recorder-button" onClick={startRecording}>

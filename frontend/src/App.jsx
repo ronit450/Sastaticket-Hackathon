@@ -7,6 +7,8 @@ import Contact from "./component/Login";
 import MindGame from "./component/MindGame";
 import VideoRecorder from "./component/VideoRecorder";
 import ReactionTimeGame from "./component/ReactionTimeGame";
+// import Score from "./component/5";
+import ScorePage from "./component/ScorePage";
 
 const App = () => {
   return (
@@ -20,6 +22,9 @@ const App = () => {
         <Route path="/mindGame" element={<MindGame />} />
         <Route path="/recording" element={<VideoRecorder />} />
         <Route path="/reaction" element={<ReactionTimeGame />} />
+        <Route path="/score" element={<ScorePage />} />
+
+
       </Routes>
     </Router>
   );
