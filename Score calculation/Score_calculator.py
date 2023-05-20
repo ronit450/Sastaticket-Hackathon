@@ -45,4 +45,4 @@ PERLOS = 50
 n = 17
 score = 2
 Rate = 8
-print(Score_calculator(Fatigue_Calculator(POM, PERLOS), Rate * 10, Memory(n), Focus(score)))
+# print(Score_calculator(Fatigue_Calculator(POM, PERLOS), Rate * 10, Memory(n), Focus(score)))
