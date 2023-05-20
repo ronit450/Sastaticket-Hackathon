@@ -34,6 +34,8 @@ const ReactionTimeGame = () => {
       
       const timeout = setTimeout(() => {
         let randomIndex;
+        setTotalDelay(totalDelay+1)
+        
         do {
           randomIndex = Math.floor(Math.random() * gridSize * gridSize);
         } while (randomIndex === redDotIndex);
@@ -102,7 +104,7 @@ const ReactionTimeGame = () => {
         <div>
           <p className="game-over">Game Over!</p>
           <p className="total-time">
-            Total time: {getFormattedTime(reactionTime + missedTime)}
+            Avg Time per hit : {getFormattedTime((reactionTime + missedTime)/(totalDelay-1))}
           </p>
         </div>
       ) : (
