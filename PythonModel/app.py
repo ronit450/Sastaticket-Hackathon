@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import os
 from moviepy.editor import VideoFileClip
 from moviepy.video.fx.resize import resize
@@ -15,17 +15,20 @@ from tensorflow import keras
 import argparse
 from flask import request
 from flask import Flask
-
+import Score_calculator
 from fatigue_detect import main
 
 
 app = Flask(__name__)
 CORS(app)
 
-
+FATIGUE = None
+TURNS = None
+SCORE = None
 
 @app.route('/api/upload', methods=['POST'])
 def upload_video():
+    global FATIGUE
     video_file = request.files['video']
     video_path = 'temp_video.avi'  # Path to temporarily store the video
 
@@ -35,10 +38,22 @@ def upload_video():
     temp = main()
     print(f'perlos is{temp[0]}')
     print(f'pom is{temp[1]}')
+    
+    FATIGUE = Score_calculator.Fatigue_Calculator(temp[1], temp[0])
 
 
-   
-    return 'Video merged and saved successfully!'
+
+
+
+@app.route('/api/score', methods=['GET'])
+def get_score():
+
+    global score
+    if FATIGUE is not None:
+        return jsonify({'score': FATIGUE})
+    else:
+        return jsonify({'score': None})
+    # return 'Video merged and saved successfully!'
 
     # # Merge the video
     # merged_video_filename = 'merged_video.avi'
@@ -65,16 +80,27 @@ def upload_video():
 
 @app.route('/api/turns', methods=['POST'])
 def upload_turns():
+    global TURNS
     turns = request.json['turns']
     print(turns)
+    TURNS = turns
     return 'Turns uploaded successfully!'
 
 
-@app.route('/api/reactTime', methods=['Post'])
-def upload_reactTime():
-    reactTime = request.json['reactTime']
-    print(reactTime)
-    return 'ReactTime uploaded successfully!'
+# @app.route('/api/score', methods=['GET'])
+# def get_score():
+    # Calculate or retrieve the score
+    # score = 85  # Replace with your actual score calculation or retrieval logic
+
+    # Return the score as a JSON response
+    # return jsonify({'Fatiuge': FATIGUE})
+
+
+# @app.route('/api/reactTime', methods=['Post'])
+# def upload_reactTime():
+#     reactTime = request.json['reactTime']
+#     print(reactTime)
+#     return 'ReactTime uploaded successfully!'
 
 
 
