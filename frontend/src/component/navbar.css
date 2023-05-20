@@ -99,6 +99,17 @@ button {
   }
 }
 
+.nav-links li:hover {
+  color: #007bff; /* Change the color on hover */
+  transition: color 0.3s; /* Add transition for smooth effect */
+}
+
+.nav-links-mobile li:hover {
+  color: #007bff; /* Change the color on hover */
+  transition: color 0.3s; /* Add transition for smooth effect */
+}
+
+
 /* Home.css */
 .image {
   max-width: 100%;
