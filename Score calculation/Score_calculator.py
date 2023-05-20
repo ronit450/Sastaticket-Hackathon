@@ -1,14 +1,14 @@
 # import values
 
-POM = 60            # percentage open mouth
-PERLOS = 100        # percentage eyes closed
-Fatigue = (0.2) * POM + (0.8) * PERLOS                # POM = 33.33 % , PERLOS = 66.66%
 # negative scores .. 
 #   if Memory score game is 70% .. means 30% lagging .. Memory = 30 (negative score) will be considered
 #   same will be for Survey and Focus.
-Survey = 7
-Memory = 80
-Focus = 90
+
+def Fatigue_Calculator(POM, PERLOS):     # percentage open mouth, percentage eyes closed
+    return (0.2) * POM + (0.8) * PERLOS                # POM = 33.33 % , PERLOS = 66.66%
+
+def Score_manager(Survey, Memory,Focus):
+    return [100-Survey, 100-Memory, 100-Focus]
 
 def Score_calculator(Fatigue, Survey, Memory, Focus):
     Weights = {'Memory':0.2, 'Focus': 0.2, 'Fatigue': 0.5, 'Survey': 0.1}        
