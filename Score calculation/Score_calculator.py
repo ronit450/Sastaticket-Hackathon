@@ -1,8 +1,8 @@
 # import values
 
-Yawning = 60
-Eyes_closing = 100
-Fatigue = (0.2) * Yawning + (0.8) * Eyes_closing                # Yawning = 33.33 % , Eyes_closing = 66.66%
+POM = 60            # percentage open mouth
+PERLOS = 100        # percentage eyes closed
+Fatigue = (0.2) * Yawning + (0.8) * Eyes_closing                # POM = 33.33 % , PERLOS = 66.66%
 # negative scores .. 
 #   if Memory score game is 70% .. means 30% lagging .. Memory = 30 (negative score) will be considered
 #   same will be for Survey and Focus.
