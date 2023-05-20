@@ -10,11 +10,15 @@ const ReactionTimeGame = () => {
   const [reactionTime, setReactionTime] = useState(0);
   const [missedTime, setMissedTime] = useState(0);
   const [gameOver, setGameOver] = useState(false);
+<<<<<<< HEAD
   // let flag_first = 0;
   const [flagFirst, setFlagFirst] = useState(0);
   // let total_delay = 0;
   const [totalDelay, setTotalDelay] = useState(0);
   // const [randomIndex, setRandomIndex] = useState(0);
+=======
+
+>>>>>>> 5785e51afc642974365ad0bb64bffb29f2819129
   useEffect(() => {
     const timeout = setTimeout(() => {
       setGameOver(true);
@@ -22,17 +26,13 @@ const ReactionTimeGame = () => {
 
     return () => {
       clearTimeout(timeout);
-      // console.log(timeout);
     };
   }, []);
 
   useEffect(() => {
     if (!gameOver) {
-      // console.log(flagFirst);
-      
-
-      
       const timeout = setTimeout(() => {
+<<<<<<< HEAD
         let randomIndex;
         do {
           randomIndex = Math.floor(Math.random() * gridSize * gridSize);
@@ -51,6 +51,13 @@ const ReactionTimeGame = () => {
        
         
       }, 2000);
+=======
+        const randomIndex = Math.floor(Math.random() * gridSize * gridSize);
+        setRedDotIndex(randomIndex);
+        setStartTime(Date.now());
+        setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
+      }, getRandomDelay());
+>>>>>>> 5785e51afc642974365ad0bb64bffb29f2819129
 
       return () => {
         clearTimeout(timeout);
@@ -58,13 +65,13 @@ const ReactionTimeGame = () => {
     }
   }, [redDotIndex, gameOver]);
 
+  
+
   const handleBoxClick = (index) => {
     if (index === redDotIndex) {
       const endTime = Date.now();
       const currentReactionTime = endTime - startTime;
-      setReactionTime(
-        (prevReactionTime) => prevReactionTime + currentReactionTime
-      );
+      setReactionTime((prevReactionTime) => prevReactionTime + currentReactionTime);
       setRedDotIndex(-1);
     } else {
       setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
@@ -107,6 +114,7 @@ const ReactionTimeGame = () => {
         </div>
       ) : (
         <div>
+<<<<<<< HEAD
   <div className={`grid-container grid-${gridSize}`}>
     {renderBoxes()}
   </div>
@@ -116,9 +124,122 @@ const ReactionTimeGame = () => {
     </p>
   )}
 </div>
+=======
+          <div className={`grid-container grid-${gridSize}`}>{renderBoxes()}</div>
+          {reactionTime > 0 && (
+            <p className="reaction-time">Your reaction time: {getFormattedTime(reactionTime)}s</p>
+          )}
+        </div>
+>>>>>>> 5785e51afc642974365ad0bb64bffb29f2819129
       )}
     </div>
   );
 };
 
 export default ReactionTimeGame;
+
+
+// import React, { useState, useEffect } from "react";
+// import "./ReactionTimeGame.css";
+
+// const ReactionTimeGame = () => {
+//   const gridSize = 3; // Grid size set to 3x3
+//   const totalGameTime = 30000; // Total game time in milliseconds (30 seconds)
+//   const boxClickPenalty = 2000; // Penalty time in milliseconds for missed clicks
+//   const [redDotIndex, setRedDotIndex] = useState(-1);
+//   const [startTime, setStartTime] = useState(0);
+//   const [reactionTime, setReactionTime] = useState(0);
+//   const [missedTime, setMissedTime] = useState(0);
+//   const [gameOver, setGameOver] = useState(false);
+
+//   useEffect(() => {
+//     const timeout = setTimeout(() => {
+//       setGameOver(true);
+//     }, totalGameTime);
+
+//     return () => {
+//       clearTimeout(timeout);
+//     };
+//   }, []);
+
+//   useEffect(() => {
+//     if (!gameOver) {
+//       const timeout = setTimeout(() => {
+//         const randomIndex = Math.floor(Math.random() * gridSize * gridSize);
+//         setRedDotIndex(randomIndex);
+//         setStartTime(Date.now());
+//         setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
+//       }, getRandomDelay());
+
+//       return () => {
+//         clearTimeout(timeout);
+//       };
+//     }
+//   }, [redDotIndex, gameOver]);
+
+//   const handleBoxClick = (index) => {
+//     if (index === redDotIndex) {
+//       const endTime = Date.now();
+//       const currentReactionTime = endTime - startTime;
+//       setReactionTime(
+//         (prevReactionTime) => prevReactionTime + currentReactionTime
+//       );
+//       setRedDotIndex(-1);
+//     } else {
+//       setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
+//     }
+//   };
+
+//   const renderBoxes = () => {
+//     const boxes = [];
+//     for (let i = 0; i < gridSize * gridSize; i++) {
+//       boxes.push(
+//         <div
+//           key={i}
+//           className={`box ${i === redDotIndex ? "red-dot" : ""}`}
+//           onClick={() => handleBoxClick(i)}
+//         ></div>
+//       );
+//     }
+//     return boxes;
+//   };
+
+//   const getRandomDelay = () => {
+//     return Math.floor(Math.random() * 3000) + 1000; // Random delay between 1 and 4 seconds
+//   };
+
+//   const getFormattedTime = (time) => {
+//     const seconds = Math.floor(time / 1000);
+//     const milliseconds = time % 1000;
+//     return `${seconds}.${milliseconds} s`;
+//   };
+
+//   return (
+//     <div className="container">
+//       <h1>Reaction Time Game</h1>
+//       {gameOver ? (
+//         <div>
+//           <p className="game-over">Game Over!</p>
+//           <p className="total-time">
+//             Total time: {getFormattedTime(reactionTime + missedTime)} (Reaction
+//             time: {getFormattedTime(reactionTime)})
+//           </p>
+//         </div>
+//       ) : (
+//         <div>
+//           <div className={`grid-container grid-${gridSize}`}>
+//             {renderBoxes()}
+//           </div>
+//           {reactionTime > 0 && (
+//             <p className="reaction-time">
+//               Your reaction time: {getFormattedTime(reactionTime)}s
+//             </p>
+//           )}
+//         </div>
+//       )}  
+//     </div>
+//   );
+// };
+
+// export default ReactionTimeGame;
+
