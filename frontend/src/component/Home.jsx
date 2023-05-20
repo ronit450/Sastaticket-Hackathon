@@ -22,7 +22,7 @@ const Home = () => {
             <img className="airplane-image" src={airplaneImage} alt="Airplane" />
           </div>
           <h2 className="subtitle">Accurate Jetlag Monitoring Made Simple</h2>
-          <Link to="/mindGame" className="play-button">
+          <Link to="/login" className="play-button">
             Play Game
           </Link>
         </div>

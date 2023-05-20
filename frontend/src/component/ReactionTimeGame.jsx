@@ -10,7 +10,7 @@ const ReactionTimeGame = () => {
   const [reactionTime, setReactionTime] = useState(0);
   const [missedTime, setMissedTime] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-
+ 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setGameOver(true);
