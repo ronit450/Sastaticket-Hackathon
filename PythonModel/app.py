@@ -25,6 +25,7 @@ CORS(app)
 FATIGUE = None
 TURNS = None
 REACTION = None
+SURVEY = None
 SCORE = None
 
 @app.route('/api/upload', methods=['POST'])
@@ -43,17 +44,30 @@ def upload_video():
     FATIGUE = Score_calculator.Fatigue_Calculator(temp[1], temp[0])
 
 
-
+@app.route('/api/survey', methods=['POST'])
+def upload_survey():
+    global SURVEY
+    survey = request.json['survey']
+    print(survey)
+    SURVEY = survey * 10
+    # TURNS = turns
+    # TURNS = Score_calculator.Memory(turns)
+    return 'Survey Score uploaded successfully!'
 
 
 @app.route('/api/score', methods=['GET'])
 def get_score():
 
-    global score
-    if FATIGUE is not None:
-        return jsonify({'score': FATIGUE})
+    # global score
+    # if FATIGUE is not None:
+    # global SCORE
+    if FATIGUE is not None and SURVEY is not None and TURNS is not None and REACTION is not None:
+        score = Score_calculator.Score_calculator(FATIGUE, SURVEY, TURNS, REACTION)
     else:
-        return jsonify({'score': None})
+        score = 0
+    return jsonify({'score': score})
+    # else:
+    #     return jsonify({'score': None})
     # return 'Video merged and saved successfully!'
 
     # # Merge the video
@@ -84,7 +98,8 @@ def upload_turns():
     global TURNS
     turns = request.json['turns']
     print(turns)
-    TURNS = turns
+    # TURNS = turns
+    TURNS = Score_calculator.Memory(turns)
     return 'Turns uploaded successfully!'
 
 
@@ -93,8 +108,9 @@ def upload_reaction():
     global REACTION
     reaction = request.json['reaction']
     print(reaction)
-    REACTION = reaction
-    return 'Turns uploaded successfully!'
+    # REACTION = reaction
+    REACTION = Score_calculator.focus(reaction)
+    return 'Reaction uploaded successfully!'
 
 
 

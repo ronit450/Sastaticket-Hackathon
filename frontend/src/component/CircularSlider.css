@@ -1,0 +1,36 @@
+.circular-slider-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.circular-slider {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    width: 160px;
+    height: 2px;
+    -webkit-appearance: none;
+    background-color: #ccc;
+}
+
+.circular-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #2196f3;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+.circular-slider-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+}

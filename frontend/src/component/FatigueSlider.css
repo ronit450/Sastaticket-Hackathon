@@ -1,0 +1,32 @@
+.fatigue-slider-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.fatigue-slider {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    width: 160px !important;
+    height: 2px !important;
+}
+
+.fatigue-slider .rc-slider-handle {
+    width: 20px !important;
+    height: 20px !important;
+    margin-top: -9px !important;
+    border: 2px solid #2196f3 !important;
+    background-color: #fff !important;
+}
+
+.fatigue-level {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+}
