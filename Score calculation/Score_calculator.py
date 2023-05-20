@@ -7,13 +7,27 @@
 def Fatigue_Calculator(POM, PERLOS):     # percentage open mouth, percentage eyes closed
     return (0.2) * POM + (0.8) * PERLOS                # POM = 33.33 % , PERLOS = 66.66%
 
-def Score_manager(Survey, Memory,Focus):
-    return [100-Survey, 100-Memory, 100-Focus]
+# def Score_manager(Survey, Memory,Focus): 
+
+def Memory(n):      # n = no.of Turns
+    if n == 6:
+        return 0
+    elif n > 6 & n < 16:
+        return 100 - 10*(n-6)
+    else:    # n > 16
+        return 100
+
+def Focus(score):
+    if score > 0 and score <= 2:
+        return (score/2) * 100
+    else:       # score > 2
+        return 100
+
 
 def Score_calculator(Fatigue, Survey, Memory, Focus):
     Weights = {'Memory':0.2, 'Focus': 0.2, 'Fatigue': 0.5, 'Survey': 0.1}        
-    Value = {'Memory':Memory, 'Focus': Focus, 'Fatigue': Fatigue, 'Survey': Survey}
-
+    Value = {'Memory':Memory, 'Focus': Focus, 'Fatigue': Fatigue, 'Survey': Survey} # percentages
+ 
     Score = 0 
     for key in Weights:
         Score += Weights[key] * Value[key]
