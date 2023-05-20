@@ -1,0 +1,55 @@
+.video-recorder-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.video-recorder-video {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.circular-frame {
+  position: relative;
+  width: 500px;
+  /* Increase the width of the circular frame as desired */
+  height: 500px;
+  /* Increase the height of the circular frame as desired */
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.circular-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: transparent;
+}
+
+.video-recorder-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+}
+
+.video-recorder-timer {
+  margin-top: 10px;
+  font-size: 18px;
+}

@@ -52,7 +52,6 @@ function MindGame() {
     }
   };
 
-
   // handle a choice
   const handleChoice = (card) => {
     console.log(card);
