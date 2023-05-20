@@ -36,6 +36,8 @@ const ReactionTimeGame = () => {
     }
   }, [redDotIndex, gameOver]);
 
+  
+
   const handleBoxClick = (index) => {
     if (index === redDotIndex) {
       const endTime = Date.now();
