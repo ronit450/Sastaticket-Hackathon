@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import "./MindGame.css";
 import SingleCard from "./SingleCard";
 
-import helmetImage from "../assets/helmet-1.png";
+// import helmetImage from "../assets/helmet-1.png";
+import Passport from "../assets/Passport.png";
 import potionImage from "../assets/potion-1.png";
 import ringImage from "../assets/ring-1.png";
 import scrollImage from "../assets/scroll-1.png";
@@ -10,7 +11,7 @@ import shieldImage from "../assets/shield-1.png";
 import swordImage from "../assets/sword-1.png";
 
 const cardImages = [
-  { src: helmetImage, matched: false },
+  { src: Passport, matched: false },
   { src: potionImage, matched: false },
   { src: ringImage, matched: false },
   { src: scrollImage, matched: false },
