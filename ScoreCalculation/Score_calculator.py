@@ -30,19 +30,19 @@ def Score_calculator(Fatigue, Survey, Memory, Focus):       # All parameters are
     for key in Weights:
         Score += Weights[key] * Value[key]
 
-    # if Score >= 0 and Score <= 30:
-    #     Severity = "Low"
-    # elif Score > 30 and Score <= 50:
-    #     Severity = "Mild"
-    # elif Score > 50 and Score <= 80:
-    #     Severity = "Moderate"
-    # elif Score > 80 and Score <= 100:
-    #     Severity = "High"
-    return Score
+    if Score >= 0 and Score <= 30:
+        Severity = "Low"
+    elif Score > 30 and Score <= 50:
+        Severity = "Mild"
+    elif Score > 50 and Score <= 80:
+        Severity = "Moderate"
+    elif Score > 80 and Score <= 100:
+        Severity = "High"
+    return Severity, Score
 
-# POM = 80
-# PERLOS = 50
-# n = 17
-# score = 2
-# Rate = 8
+POM = 80
+PERLOS = 50
+n = 17
+score = 2
+Rate = 8
 # print(Score_calculator(Fatigue_Calculator(POM, PERLOS), Rate * 10, Memory(n), Focus(score)))
