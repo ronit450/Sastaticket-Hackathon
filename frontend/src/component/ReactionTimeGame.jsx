@@ -21,29 +21,34 @@ const ReactionTimeGame = () => {
 
     return () => {
       clearTimeout(timeout);
+      // console.log(timeout);
     };
   }, []);
 
   useEffect(() => {
     if (!gameOver) {
-      console.log(flagFirst);
+      // console.log(flagFirst);
       
 
       
       const timeout = setTimeout(() => {
         const randomIndex = Math.floor(Math.random() * gridSize * gridSize);
+        while(randomIndex!= redDotIndex){
+          const randomIndex = Math.floor(Math.random() * gridSize * gridSize);
+        }
+        console.log(randomIndex);
         if (flagFirst === 0) {
           setFlagFirst(1);
         } 
         else if (redDotIndex !== -1) {
-          console.log(reactionTime);
-          setReactionTime((prevReactionTime) => prevReactionTime + totalDelay);
+          // console.log(reactionTime);
+          setReactionTime((prevReactionTime) => prevReactionTime + 2000);
         }
         setRedDotIndex(randomIndex);
         setStartTime(Date.now());
         setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
-        setTotalDelay(getRandomDelay());
-      }, totalDelay);
+        
+      }, 2000);
 
       return () => {
         clearTimeout(timeout);
