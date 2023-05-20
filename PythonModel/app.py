@@ -24,6 +24,7 @@ CORS(app)
 
 FATIGUE = None
 TURNS = None
+REACTION = None
 SCORE = None
 
 @app.route('/api/upload', methods=['POST'])
@@ -87,13 +88,30 @@ def upload_turns():
     return 'Turns uploaded successfully!'
 
 
+@app.route('/api/reaction', methods=['POST'])
+def upload_reaction():
+    global REACTION
+    reaction = request.json['reaction']
+    print(reaction)
+    REACTION = reaction
+    return 'Turns uploaded successfully!'
+
+
+
+
+
+
+
 # @app.route('/api/score', methods=['GET'])
 # def get_score():
-    # Calculate or retrieve the score
-    # score = 85  # Replace with your actual score calculation or retrieval logic
+#     # Calculate or retrieve the score
 
-    # Return the score as a JSON response
-    # return jsonify({'Fatiuge': FATIGUE})
+
+
+#     score = 85  # Replace with your actual score calculation or retrieval logic
+
+#     # Return the score as a JSON response
+#     return jsonify({'Fatiuge': FATIGUE})
 
 
 # @app.route('/api/reactTime', methods=['Post'])
