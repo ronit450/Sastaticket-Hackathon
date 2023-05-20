@@ -3,7 +3,7 @@ import "./ReactionTimeGame.css";
 
 const ReactionTimeGame = () => {
   const gridSize = 3; // Grid size set to 3x3
-  const totalGameTime = 30000; // Total game time in milliseconds (30 seconds)
+  const totalGameTime = 34000; // Total game time in milliseconds (30 seconds)
   const boxClickPenalty = 2000; // Penalty time in milliseconds for missed clicks
   const [redDotIndex, setRedDotIndex] = useState(-1);
   const [startTime, setStartTime] = useState(0);
@@ -14,6 +14,7 @@ const ReactionTimeGame = () => {
   const [flagFirst, setFlagFirst] = useState(0);
   // let total_delay = 0;
   const [totalDelay, setTotalDelay] = useState(0);
+  // const [randomIndex, setRandomIndex] = useState(0);
   useEffect(() => {
     const timeout = setTimeout(() => {
       setGameOver(true);
@@ -32,11 +33,14 @@ const ReactionTimeGame = () => {
 
       
       const timeout = setTimeout(() => {
-        const randomIndex = Math.floor(Math.random() * gridSize * gridSize);
-        while(randomIndex!= redDotIndex){
-          const randomIndex = Math.floor(Math.random() * gridSize * gridSize);
-        }
-        console.log(randomIndex);
+        let randomIndex;
+        setTotalDelay(totalDelay+1)
+        
+        do {
+          randomIndex = Math.floor(Math.random() * gridSize * gridSize);
+        } while (randomIndex === redDotIndex);
+         
+        
         if (flagFirst === 0) {
           setFlagFirst(1);
         } 
@@ -46,7 +50,7 @@ const ReactionTimeGame = () => {
         }
         setRedDotIndex(randomIndex);
         setStartTime(Date.now());
-        setMissedTime((prevMissedTime) => prevMissedTime + boxClickPenalty);
+       
         
       }, 2000);
 
@@ -55,8 +59,6 @@ const ReactionTimeGame = () => {
       };
     }
   }, [redDotIndex, gameOver]);
-
-  
 
   const handleBoxClick = (index) => {
     if (index === redDotIndex) {
@@ -102,20 +104,20 @@ const ReactionTimeGame = () => {
         <div>
           <p className="game-over">Game Over!</p>
           <p className="total-time">
-            Total time: {getFormattedTime(reactionTime )}
+            Avg Time per hit : {getFormattedTime((reactionTime + missedTime)/(totalDelay-1))}
           </p>
         </div>
       ) : (
         <div>
-          <div className={`grid-container grid-${gridSize}`}>
-            {renderBoxes()}
-          </div>
-          {reactionTime > 0 && (
-            <p className="reaction-time">
-              Your reaction time: {getFormattedTime(reactionTime)}s
-            </p>
-          )}
-        </div>
+  <div className={`grid-container grid-${gridSize}`}>
+    {renderBoxes()}
+  </div>
+  {reactionTime > 0 && (
+    <p className="reaction-time">
+      Your reaction time: {getFormattedTime(reactionTime)} <span style={{ color: 'red' }}>+ {getFormattedTime(missedTime)}</span>
+    </p>
+  )}
+</div>
       )}
     </div>
   );
