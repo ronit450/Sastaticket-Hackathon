@@ -1,4 +1,4 @@
-.about-container {
+/* .about-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -49,4 +49,67 @@
 }
 
 .developer-name {
-    font-size: 1.2rem
+    font-size: 1.2rem */
+
+.aboutt {
+  width: 100%;
+  padding: 78px 0px 0px;
+  /* max-width: 660px; */
+  margin: 10% auto;
+}
+
+.aboutt img {
+  height: 100%;  
+  width: 420px;
+}
+
+.about-text {
+  width: 550px;
+}
+
+.main {
+  width: 1130px;
+  max-width: 95%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.about-text h1 {
+  color: black;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+  font-size: 80px;
+}
+
+/* .about-text h5 {
+  color: black;
+  margin-bottom: 25px;
+  text-transform: capitalize;
+  font-size: 30px;
+  letter-spacing: 2px;
+} */
+
+span {
+  color: #c23866;
+}
+
+.about-text p {
+  color: black;
+  letter-spacing: 1px;
+  line-height: 28px;
+  font-size: 18px;
+  margin-bottom: 45px;
+}
+
+button {
+  background-color: #c23866;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 5px;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
