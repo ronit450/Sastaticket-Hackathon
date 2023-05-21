@@ -32,7 +32,7 @@ const SurveySlider = () => {
       await uploadSurvey(sliderValue); // Wait for the survey upload
 
       // Delay the navigation by 1 second to show the loader
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       navigate("/score");
     } catch (error) {

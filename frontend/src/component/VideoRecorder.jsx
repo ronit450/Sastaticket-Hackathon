@@ -3,12 +3,22 @@ import axios from "axios";
 import "./VideoRecorder.css";
 import { Link, useNavigate } from "react-router-dom";
 
+const Loader = () => {
+  return (
+    <div className="loader-container">
+      <div className="loader"></div>
+      <p>Loading...</p>
+    </div>
+  );
+};
+
 const VideoRecorder = () => {
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [timer, setTimer] = useState(15);
   const [showButton, setShowButton] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,9 +65,12 @@ const VideoRecorder = () => {
             uploadVideo(fullBlob);
             recordedChunks = [];
 
+            setShowLoader(true); // Show the loader
+
             setTimeout(() => {
+              setShowLoader(false); // Hide the loader
               navigate("/popup1");
-            }, 200);
+            }, 2000);
           };
 
           mediaRecorderRef.current.start();
@@ -95,37 +108,41 @@ const VideoRecorder = () => {
 
   return (
     <div className="video-recorder-container">
-      <h2 className="video-recorder-title">Welcome to Video Recorder</h2>
-      <p className="video-recorder-instructions">
-        Click the "Start Recording" button below to start recording a video.
-        Please ensure your camera is enabled. You will have 15 seconds of
-        recording time.
-      </p>
-      <div className="rectangle-frame">
-        <video ref={videoRef} className="video-recorder-video" />
-        {recording && (
-          <div className="circular-progress">
-            <div
-              className="progress-bar"
-              style={{
-                animationDuration: `${timer}s`,
-              }}
-            />
+      {showLoader ? (
+        <Loader />
+      ) : (
+        <>
+          <h2 className="video-recorder-title">Welcome to Video Recorder</h2>
+          <p className="video-recorder-instructions">
+            Click the "Start Recording" button below to start recording a video.
+            Please ensure your camera is enabled. You will have 15 seconds of
+            recording time.
+          </p>
+          <div className="rectangle-frame">
+            <video ref={videoRef} className="video-recorder-video" />
+            {recording && (
+              <div className="circular-progress">
+                <div
+                  className="progress-bar"
+                  style={{
+                    animationDuration: `${timer}s`,
+                  }}
+                />
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      {!recording && !showButton && (
-        <button className="video-recorder-button" onClick={startRecording}>
-          Start Recording
-        </button>
+          {!recording && !showButton && (
+            <button className="video-recorder-button" onClick={startRecording}>
+              Start Recording
+            </button>
+          )}
+
+          {recording && (
+            <p className="video-recorder-timer">Recording Time: {timer}s</p>
+          )}
+        </>
       )}
-
-      {recording && (
-        <p className="video-recorder-timer">Recording Time: {timer}s</p>
-      )}
-
-
     </div>
   );
 };
