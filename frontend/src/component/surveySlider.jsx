@@ -19,7 +19,7 @@ const SurveySlider = () => {
   const navigate = useNavigate();
 
   const handleSliderChange = (value) => {
-    if (value <= sliderValue) {
+    if (value <= 10) {
       setSliderValue(value);
     }
   };
@@ -62,7 +62,7 @@ const SurveySlider = () => {
           min={0}
           max={10}
           onChange={handleSliderChange}
-          disable={!isLoading && sliderValue >= 10} // Disable the slider when isLoading is false and sliderValue is greater than or equal to 10
+           // Disable the slider when isLoading is false and sliderValue is greater than or equal to 10
         />
         <p>Slider Value: {sliderValue}</p>
         {isLoading ? (
