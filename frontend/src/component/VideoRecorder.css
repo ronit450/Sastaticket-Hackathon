@@ -4,27 +4,27 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 100vw;
+  
 }
-
+.video-recorder-instructions {
+  margin-top: 20px;
+}
 .video-recorder-video {
   width: 100%;
   height: auto;
   object-fit: contain;
-  border-radius: 50%;
+  border-radius: 10px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.circular-frame {
+.rectangle-frame {
   position: relative;
-  width: 500px;
-  /* Increase the width of the circular frame as desired */
-  height: 500px;
-  /* Increase the height of the circular frame as desired */
-  border-radius: 50%;
+  width: 350px;
+  height: 350px;
+  border-radius: 20px;
   overflow: hidden;
 }
 
@@ -39,7 +39,7 @@
 .progress-bar {
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: 20px;
   background-color: transparent;
 }
 

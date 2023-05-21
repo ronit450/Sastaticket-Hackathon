@@ -23,7 +23,7 @@ const Home = () => {
           </div>
           <h2 className="subtitle">Accurate Jetlag Monitoring Made Simple</h2>
           <Link to="/login" className="play-button">
-            Play Game
+            Let's Begin
           </Link>
         </div>
       </div>

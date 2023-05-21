@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ReactionTimeGame.css";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const ReactionTimeGame = () => {
   const gridSize = 3; // Grid size set to 3x3
@@ -11,7 +12,7 @@ const ReactionTimeGame = () => {
   const [reactionTime, setReactionTime] = useState(0);
   const [missedTime, setMissedTime] = useState(0);
   const [gameOver, setGameOver] = useState(false);
- 
+  const navigate = useNavigate();
   // let flag_first = 0;
   const [flagFirst, setFlagFirst] = useState(0);
   // let total_delay = 0;
@@ -27,6 +28,17 @@ const ReactionTimeGame = () => {
       // console.log(timeout);
     };
   }, []);
+
+
+  useEffect(() => {
+    if (gameOver) {
+      const timer = setTimeout(() => {
+        navigate("/surveypage");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameOver, navigate]);
 
   useEffect(() => {
     if (!gameOver) {

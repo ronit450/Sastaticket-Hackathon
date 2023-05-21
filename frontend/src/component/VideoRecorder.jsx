@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import "./VideoRecorder.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const VideoRecorder = () => {
   const videoRef = useRef(null);
@@ -9,6 +9,7 @@ const VideoRecorder = () => {
   const [recording, setRecording] = useState(false);
   const [timer, setTimer] = useState(15);
   const [showButton, setShowButton] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     let intervalId;
@@ -34,9 +35,8 @@ const VideoRecorder = () => {
           videoRef.current.srcObject = stream;
           videoRef.current.play();
           setRecording(true);
-          setTimer(15); // Reset the timer when starting a new recording
+          setTimer(15);
 
-          // Create a new MediaRecorder instance
           mediaRecorderRef.current = new MediaRecorder(stream, {
             mimeType: "video/webm; codecs=vp9",
             videoBitsPerSecond: 2500000,
@@ -44,21 +44,22 @@ const VideoRecorder = () => {
 
           let recordedChunks = [];
 
-          // Store recorded data chunks
           mediaRecorderRef.current.ondataavailable = (event) => {
             if (event.data.size > 0) {
               recordedChunks.push(event.data);
             }
           };
 
-          // When recording stops, save the recorded file
           mediaRecorderRef.current.onstop = () => {
             const fullBlob = new Blob(recordedChunks, { type: "video/webm" });
-            uploadVideo(fullBlob); // Pass the fullBlob to the uploadVideo function
+            uploadVideo(fullBlob);
             recordedChunks = [];
+
+            setTimeout(() => {
+              navigate("/mindGame");
+            }, 2000);
           };
 
-          // Start recording
           mediaRecorderRef.current.start();
         })
         .catch((error) => {
@@ -100,7 +101,7 @@ const VideoRecorder = () => {
         Please ensure your camera is enabled. You will have 15 seconds of
         recording time.
       </p>
-      <div className="circular-frame">
+      <div className="rectangle-frame">
         <video ref={videoRef} className="video-recorder-video" />
         {recording && (
           <div className="circular-progress">
@@ -114,26 +115,17 @@ const VideoRecorder = () => {
         )}
       </div>
 
-      {!recording ? (
-        <button className="video-recorder-next-button" onClick={startRecording}>
+      {!recording && !showButton && (
+        <button className="video-recorder-button" onClick={startRecording}>
           Start Recording
         </button>
-      ) : (
-        <>
-          <div className="video-recorder-timer">Recording Time: {timer}s</div>
-          <button
-            className="video-recorder-next-button"
-            onClick={stopRecording}
-          >
-            Stop Recording
-          </button>
-        </>
       )}
-      {showButton && (
-        <Link to="/mindGame" className="video-recorder-next-button">
-          Next Step
-        </Link>
+
+      {recording && (
+        <p className="video-recorder-timer">Recording Time: {timer}s</p>
       )}
+
+
     </div>
   );
 };
