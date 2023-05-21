@@ -23,7 +23,7 @@ def Focus(score):
 
 
 def Score_calculator(Fatigue, Survey, Memory, Focus):       # All parameters are percentages
-    Weights = {'Memory':0.2, 'Focus': 0.2, 'Fatigue': 0.5, 'Survey': 0.1}        
+    Weights = {'Memory':0.3, 'Focus': 0.2, 'Fatigue': 0.4, 'Survey': 0.1}        
     Value = {'Memory':Memory, 'Focus': Focus, 'Fatigue': Fatigue, 'Survey': Survey} # percentages
  
     Score = 0 
