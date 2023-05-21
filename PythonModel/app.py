@@ -36,6 +36,12 @@ def upload_video():
 
     # Save the video file
     video_file.save(video_path)
+    time.sleep(5)
+    temp = main()
+    print(f'perlos is{temp[0]}')
+    print(f'pom is{temp[1]}')
+
+    FATIGUE = Score_calculator.Fatigue_Calculator(temp[1], temp[0])
 
 
 @app.route('/api/survey', methods=['POST'])
@@ -53,12 +59,7 @@ def upload_survey():
 def get_score():
 
 
-    time.sleep(5)
-    temp = main()
-    print(f'perlos is{temp[0]}')
-    print(f'pom is{temp[1]}')
-    
-    FATIGUE = Score_calculator.Fatigue_Calculator(temp[1], temp[0])
+
 
     # global score
     # if FATIGUE is not None:
