@@ -13,8 +13,8 @@ import ScorePage from "./component/ScorePage";
 
 import SurveySlider from "./component/surveySlider";
 import AboutPage from "./component/About";
-
-
+import Popup1 from "./component/popup/Popup1";
+import Popup2 from "./component/popup/Popup2";
 
 const App = () => {
   return (
@@ -32,6 +32,8 @@ const App = () => {
         <Route path="/score" element={<ScorePage />} />
         <Route path="/surveypage" element={<SurveySlider />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/popup1" element={<Popup1 />} />
+        <Route path="/popup2" element={<Popup2 />} />
 
       </Routes>
     </Router>

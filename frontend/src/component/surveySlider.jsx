@@ -51,7 +51,7 @@ const SurveySlider = () => {
   };
 
   return (
-    <div className="App">
+    <div className="app1">
       <h2 className="question">Please rate your tiredness on a scale of 0-10</h2>
       <div className="slider-container">
         <CircularSlider
