@@ -11,15 +11,12 @@ const ReactionTimeGame = () => {
   const [reactionTime, setReactionTime] = useState(0);
   const [missedTime, setMissedTime] = useState(0);
   const [gameOver, setGameOver] = useState(false);
-<<<<<<< HEAD
  
-=======
   // let flag_first = 0;
   const [flagFirst, setFlagFirst] = useState(0);
   // let total_delay = 0;
   const [totalDelay, setTotalDelay] = useState(0);
   // const [randomIndex, setRandomIndex] = useState(0);
->>>>>>> 4617c35fe91a1f528d3cd1fb1d14e2418393573a
   useEffect(() => {
     const timeout = setTimeout(() => {
       setGameOver(true);
