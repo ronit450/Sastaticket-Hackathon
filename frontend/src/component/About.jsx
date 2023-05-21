@@ -2,7 +2,7 @@ import React from "react";
 import "./about.css";
 
 import developer1 from "./developer3.jpeg";
-import developer2 from "./developer2.jpeg";
+import developer2 from "./developer3.jpeg";
 import developer3 from "./developer3.jpeg";
 import developer4 from "./developer3.jpeg";
 import developer5 from "./developer3.jpeg";
@@ -102,21 +102,19 @@ const AboutPage = () => {
       </div>
       <div className="developers">
         <h2 className="developers-title">Our Developers</h2>
-        <ul className="developer-list">
+        <div className="developer-grid">
           {developers.map((developer, index) => (
-            <li key={index} className="developer-item">
-              <div className="developer-image-container">
-                <img
-                  className="developer-image"
-                  src={developer.image}
-                  alt={developer.name}
-                />
-              </div>
+            <div key={index} className="developer-item">
+              <img
+                className="developer-image"
+                src={developer.image}
+                alt={developer.name}
+              />
               <h3 className="developer-name">{developer.name}</h3>
               <p className="developer-role">{developer.role}</p>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
     </div>
   );
