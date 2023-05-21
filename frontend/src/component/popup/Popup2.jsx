@@ -9,13 +9,11 @@ const Popup2 = () => {
       <div className="terms-text">
         <h1>Reaction Game</h1>
         <p>
-          Welcome to our professional air ticket service website! We strive to
-          provide you with excellent services and enhance your travel
-          experience. Before using our website and its features, please
-          carefully review the following terms and conditions that govern your
-          use. By using our website, you agree to be bound by these terms and
-          conditions. If you do not agree with any part of these terms and
-          conditions, please refrain from using our website. General
+        The game consists of a 3x3 grid with multiple blocks.
+        Each block within the grid will change color and become red at regular intervals.
+        Your task is to quickly identify the red block and click on it as soon as possible.
+        After every two seconds, another block within the grid will turn red, and you must respond promptly by clicking on it.
+        This pattern will continue for a duration of thirty seconds.
         </p>
       </div>
 

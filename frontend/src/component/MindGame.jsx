@@ -129,7 +129,7 @@ function MindGame() {
       </div>
 
       <p className="turns">Turns: {turns}</p>
-      {gameFinished && <button>Let's Move On!</button>}
+      {gameFinished}
     </div>
   );
 }

@@ -9,13 +9,11 @@ const Popup1 = () => {
       <div className="terms-text">
         <h1>Mind Game</h1>
         <p>
-          Welcome to our professional air ticket service website! We strive to
-          provide you with excellent services and enhance your travel
-          experience. Before using our website and its features, please
-          carefully review the following terms and conditions that govern your
-          use. By using our website, you agree to be bound by these terms and
-          conditions. If you do not agree with any part of these terms and
-          conditions, please refrain from using our website. General
+        At the start, all the cards will be shown face up, allowing you to see their contents.
+        You need to flip two cards at a time, attempting to find pairs that have the same sides.
+        To flip a card, simply click or tap on it to expose its side.
+        Each time you flip two cards, it counts as one turn.
+        Continue flipping pairs of cards and trying to match them until all pairs have been successfully matched.
         </p>
       </div>
 
