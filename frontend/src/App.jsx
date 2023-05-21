@@ -12,6 +12,7 @@ import Recommendation from "./component/Recommendation";
 import ScorePage from "./component/ScorePage";
 
 import SurveySlider from "./component/surveySlider";
+import AboutPage from "./component/About";
 
 
 
@@ -30,6 +31,7 @@ const App = () => {
         <Route path="/recom" element={<Recommendation />} />
         <Route path="/score" element={<ScorePage />} />
         <Route path="/surveypage" element={<SurveySlider />} />
+        <Route path="/about" element={<AboutPage />} />
 
       </Routes>
     </Router>

@@ -1,28 +1,52 @@
 import React, { useState } from "react";
-import './survey.css';
-import CircularSlider from '@fseehawer/react-circular-slider'
-import axios from 'axios';
+import "./survey.css";
+import CircularSlider from "@fseehawer/react-circular-slider";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+
+const Loader = () => {
+  return (
+    <div className="loader-container">
+      <div className="loader"></div>
+      <p>Loading...</p>
+    </div>
+  );
+};
 
 const SurveySlider = () => {
   const [sliderValue, setSliderValue] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
 
-  const handleSubmit = () => {
-    // Handle the submit action here
-    // You can use the sliderValue state to access the selected value
-    console.log("Submitted:", sliderValue);
-    uploadSurvey(sliderValue);
-};
-
-    const uploadSurvey = async (survey) => {
+  const handleSubmit = async () => {
     try {
-      await axios.post('http://127.0.0.1:5000/api/survey', { survey});
-      console.log('Survey uploaded successfully!');
+      setIsLoading(true); // Start loading
+
+      console.log("Submitted:", sliderValue);
+      await uploadSurvey(sliderValue); // Wait for the survey upload
+
+      const timer = setTimeout(() => {
+        navigate("/score");
+      }, 2000);
+
+      return () => clearTimeout(timer);
     } catch (error) {
-      console.error('Survey uploading turns:', error);
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false); // Stop loading
+    }
+  };
+
+  const uploadSurvey = async (survey) => {
+    try {
+      await axios.post("http://127.0.0.1:5000/api/survey", { survey });
+      console.log("Survey uploaded successfully!");
+    } catch (error) {
+      console.error("Survey uploading error:", error);
     }
   };
 
@@ -33,17 +57,22 @@ const SurveySlider = () => {
         <CircularSlider
           width={200}
           height={200}
-          label='Fatigue Rate'
+          label="Fatigue Rate"
           min={0}
           max={10}
           onChange={handleSliderChange}
         />
         <p>Slider Value: {sliderValue}</p>
-        <button onClick={handleSubmit} className="submit-btn">Submit</button>
-
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <button onClick={handleSubmit} className="submit-btn">
+            Calculate my JetLag
+          </button>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default SurveySlider;

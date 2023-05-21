@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./MindGame.css";
 import SingleCard from "./SingleCard";
 import axios from "axios";
-
+import { Link, useNavigate } from "react-router-dom";
 // import helmetImage from "../assets/helmet-1.png";
 import Passport from "../assets/Passport.png";
 import potionImage from "../assets/potion-1.png";
@@ -27,7 +27,7 @@ function MindGame() {
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
   const [gameFinished, setGameFinished] = useState(false); // New state variable
-
+  const navigate = useNavigate();
   // shuffle cards for new game
   const shuffleCards = () => {
     const shuffledCards = [...cardImages, ...cardImages]
@@ -83,9 +83,20 @@ function MindGame() {
       console.log("Game Over");
       console.log(turns);
       uploadTurns(turns);
-      setGameFinished(true); // Update gameFinished state
+      setGameFinished(true);
+// Update gameFinished state
     }
   }, [cards, turns]);
+
+    useEffect(() => {
+    if (gameFinished) {
+      const timer = setTimeout(() => {
+        navigate("/reaction");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameFinished, navigate]);
 
   // reset choices & increase turn
   const resetTurn = () => {
@@ -103,7 +114,7 @@ function MindGame() {
   return (
     <div className="App">
       <h1>Magic Match</h1>
-      <button onClick={shuffleCards}>New Game</button>
+      
 
       <div className="card-grid">
         {cards.map((card) => (
