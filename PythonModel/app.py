@@ -40,7 +40,7 @@ def upload_video():
     temp = main()
     print(f'perlos is{temp[0]}')
     print(f'pom is{temp[1]}')
-    
+
     FATIGUE = Score_calculator.Fatigue_Calculator(temp[1], temp[0])
 
 
@@ -58,11 +58,15 @@ def upload_survey():
 @app.route('/api/score', methods=['GET'])
 def get_score():
 
+
+
+
     # global score
     # if FATIGUE is not None:
     # global SCORE
     if FATIGUE is not None and SURVEY is not None and TURNS is not None and REACTION is not None:
         score = Score_calculator.Score_calculator(FATIGUE, SURVEY, TURNS, REACTION)
+        print(score)
     else:
         score = 0
     return jsonify({'score': score})
@@ -109,7 +113,7 @@ def upload_reaction():
     reaction = request.json['reaction']
     print(reaction)
     # REACTION = reaction
-    REACTION = Score_calculator.focus(reaction)
+    REACTION = Score_calculator.Focus(reaction)
     return 'Reaction uploaded successfully!'
 
 

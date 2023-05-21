@@ -10,8 +10,7 @@ import Login from "./component/Login";
 import Recommendation from "./component/Recommendation";
 // import Score from "./component/5";
 import ScorePage from "./component/ScorePage";
-import FatigueSlider from "./component/FatigueSlider";
-import FatiguePage from "./component/FatigueSlider";
+
 import SurveySlider from "./component/surveySlider";
 
 
@@ -30,7 +29,6 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/recom" element={<Recommendation />} />
         <Route path="/score" element={<ScorePage />} />
-        <Route path="/survey" element={<FatiguePage />} />
         <Route path="/surveypage" element={<SurveySlider />} />
 
       </Routes>
