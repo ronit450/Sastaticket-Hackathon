@@ -19,7 +19,9 @@ const SurveySlider = () => {
   const navigate = useNavigate();
 
   const handleSliderChange = (value) => {
-    setSliderValue(value);
+    if (value <= sliderValue) {
+      setSliderValue(value);
+    }
   };
 
   const handleSubmit = async () => {
@@ -31,7 +33,7 @@ const SurveySlider = () => {
 
       const timer = setTimeout(() => {
         navigate("/score");
-      }, 2000);
+      }, 1000);
 
       return () => clearTimeout(timer);
     } catch (error) {
@@ -57,10 +59,11 @@ const SurveySlider = () => {
         <CircularSlider
           width={200}
           height={200}
-          label="Fatigue Rate"
+          label="Tiredness"
           min={0}
           max={10}
           onChange={handleSliderChange}
+          disable={!isLoading && sliderValue >= 10} // Disable the slider when isLoading is false and sliderValue is greater than or equal to 10
         />
         <p>Slider Value: {sliderValue}</p>
         {isLoading ? (

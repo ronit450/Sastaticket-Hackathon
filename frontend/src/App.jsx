@@ -14,8 +14,6 @@ import ScorePage from "./component/ScorePage";
 import SurveySlider from "./component/surveySlider";
 import AboutPage from "./component/About";
 
-
-
 const App = () => {
   return (
     <Router>

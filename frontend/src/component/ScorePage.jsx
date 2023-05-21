@@ -72,7 +72,11 @@ const ScorePage = () => {
     <>
       <div className="recommendation-container">
         <CircleProgressBar percentage={score} />
-        <p className={`severity ${severity.toLowerCase()}`}>{severity}</p>
+        <p className="text-severity">
+          Your Jetlag Severity is{" "}
+          <span className={`severity ${severity.toLowerCase()}`}>{severity}</span>
+        </p>
+
         <div className="recommendation">
           <h2>Recommendations</h2>
           <div className="techniques-list">

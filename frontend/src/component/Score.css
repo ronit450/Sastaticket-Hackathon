@@ -10,8 +10,17 @@
   margin-bottom: 20px;
 }
 
+.text-severity{
+  font-size: 24px;
+  font-weight: bold;
+  /* text-transform: uppercase; */
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+
 .severity {
-  font-size: 18px;
+  font-size: 30px;
   font-weight: bold;
   margin-top: 10px;
   text-transform: uppercase;
@@ -26,7 +35,7 @@
 }
 
 .severity.moderate {
-  color: yellow;
+  color: rgb(189, 202, 3);
 }
 
 .severity.high {
