@@ -1,12 +1,14 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import "./VideoRecorder.css";
+import { Link } from "react-router-dom";
 
 const VideoRecorder = () => {
   const videoRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const [recording, setRecording] = useState(false);
   const [timer, setTimer] = useState(15);
+  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     let intervalId;
@@ -36,7 +38,7 @@ const VideoRecorder = () => {
 
           // Create a new MediaRecorder instance
           mediaRecorderRef.current = new MediaRecorder(stream, {
-            mimeType: 'video/webm; codecs=vp9',
+            mimeType: "video/webm; codecs=vp9",
             videoBitsPerSecond: 2500000,
           });
 
@@ -51,7 +53,7 @@ const VideoRecorder = () => {
 
           // When recording stops, save the recorded file
           mediaRecorderRef.current.onstop = () => {
-            const fullBlob = new Blob(recordedChunks, { type: 'video/webm' });
+            const fullBlob = new Blob(recordedChunks, { type: "video/webm" });
             uploadVideo(fullBlob); // Pass the fullBlob to the uploadVideo function
             recordedChunks = [];
           };
@@ -60,7 +62,7 @@ const VideoRecorder = () => {
           mediaRecorderRef.current.start();
         })
         .catch((error) => {
-          console.error('Error accessing camera: ', error);
+          console.error("Error accessing camera: ", error);
         });
     }
   };
@@ -75,22 +77,29 @@ const VideoRecorder = () => {
     videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
     setRecording(false);
     uploadVideo();
+    setShowButton(true);
   };
 
   const uploadVideo = async (blob) => {
     const formData = new FormData();
-    formData.append('video', blob);
+    formData.append("video", blob);
 
     try {
-      await axios.post('http://127.0.0.1:5000/api/upload', formData);
-      console.log('Video uploaded successfully!');
+      await axios.post("http://127.0.0.1:5000/api/upload", formData);
+      console.log("Video uploaded successfully!");
     } catch (error) {
-      console.error('Error uploading video:', error);
+      console.error("Error uploading video:", error);
     }
   };
 
   return (
     <div className="video-recorder-container">
+      <h2 className="video-recorder-title">Welcome to Video Recorder</h2>
+      <p className="video-recorder-instructions">
+        Click the "Start Recording" button below to start recording a video.
+        Please ensure your camera is enabled. You will have 15 seconds of
+        recording time.
+      </p>
       <div className="circular-frame">
         <video ref={videoRef} className="video-recorder-video" />
         {recording && (
@@ -106,16 +115,24 @@ const VideoRecorder = () => {
       </div>
 
       {!recording ? (
-        <button className="video-recorder-button" onClick={startRecording}>
+        <button className="video-recorder-next-button" onClick={startRecording}>
           Start Recording
         </button>
       ) : (
         <>
           <div className="video-recorder-timer">Recording Time: {timer}s</div>
-          <button className="video-recorder-button" onClick={stopRecording}>
+          <button
+            className="video-recorder-next-button"
+            onClick={stopRecording}
+          >
             Stop Recording
           </button>
         </>
+      )}
+      {showButton && (
+        <Link to="/mindGame" className="video-recorder-next-button">
+          Next Step
+        </Link>
       )}
     </div>
   );

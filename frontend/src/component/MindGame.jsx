@@ -3,7 +3,6 @@ import "./MindGame.css";
 import SingleCard from "./SingleCard";
 import axios from "axios";
 
-
 // import helmetImage from "../assets/helmet-1.png";
 import Passport from "../assets/Passport.png";
 import potionImage from "../assets/potion-1.png";
@@ -27,6 +26,7 @@ function MindGame() {
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [gameFinished, setGameFinished] = useState(false); // New state variable
 
   // shuffle cards for new game
   const shuffleCards = () => {
@@ -38,17 +38,15 @@ function MindGame() {
     setChoiceTwo(null);
     setCards(shuffledCards);
     setTurns(0);
+    setGameFinished(false); // Reset gameFinished state
   };
-
-
-
 
   const uploadTurns = async (turns) => {
     try {
-      await axios.post('http://127.0.0.1:5000/api/turns', { turns });
-      console.log('Turns uploaded successfully!');
+      await axios.post("http://127.0.0.1:5000/api/turns", { turns });
+      console.log("Turns uploaded successfully!");
     } catch (error) {
-      console.error('Error uploading turns:', error);
+      console.error("Error uploading turns:", error);
     }
   };
 
@@ -77,19 +75,16 @@ function MindGame() {
       } else {
         setTimeout(() => resetTurn(), 1000);
       }
-
     }
-
   }, [choiceOne, choiceTwo]);
 
-
-
   useEffect(() => {
-  if (cards.every((card) => card.matched)) {
-    console.log("Game Over");
-    console.log(turns);
-    uploadTurns(turns);
-  }
+    if (cards.every((card) => card.matched)) {
+      console.log("Game Over");
+      console.log(turns);
+      uploadTurns(turns);
+      setGameFinished(true); // Update gameFinished state
+    }
   }, [cards, turns]);
 
   // reset choices & increase turn
@@ -99,7 +94,6 @@ function MindGame() {
     setTurns((prevTurns) => prevTurns + 1);
     setDisabled(false);
   };
-
 
   // start new game automagically
   useEffect(() => {
@@ -124,6 +118,7 @@ function MindGame() {
       </div>
 
       <p className="turns">Turns: {turns}</p>
+      {gameFinished && <button>Let's Move On!</button>}
     </div>
   );
 }
