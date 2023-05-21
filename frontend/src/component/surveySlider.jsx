@@ -31,11 +31,10 @@ const SurveySlider = () => {
       console.log("Submitted:", sliderValue);
       await uploadSurvey(sliderValue); // Wait for the survey upload
 
-      const timer = setTimeout(() => {
-        navigate("/score");
-      }, 1000);
+      // Delay the navigation by 1 second to show the loader
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      return () => clearTimeout(timer);
+      navigate("/score");
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -53,7 +52,7 @@ const SurveySlider = () => {
   };
 
   return (
-    <div className="App">
+    <div className="app1">
       <h2 className="question">Please rate your tiredness on a scale of 0-10</h2>
       <div className="slider-container">
         <CircularSlider

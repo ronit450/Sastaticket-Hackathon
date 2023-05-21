@@ -56,8 +56,8 @@ const VideoRecorder = () => {
             recordedChunks = [];
 
             setTimeout(() => {
-              navigate("/mindGame");
-            }, 2000);
+              navigate("/popup1");
+            }, 200);
           };
 
           mediaRecorderRef.current.start();

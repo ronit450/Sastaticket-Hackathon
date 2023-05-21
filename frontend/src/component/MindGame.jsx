@@ -91,8 +91,8 @@ function MindGame() {
     useEffect(() => {
     if (gameFinished) {
       const timer = setTimeout(() => {
-        navigate("/reaction");
-      }, 2000);
+        navigate("/popup2");
+      }, 1000);
 
       return () => clearTimeout(timer);
     }
