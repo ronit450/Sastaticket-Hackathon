@@ -17,5 +17,3 @@ To assist travelers in managing jet lag, our solution provides personalized reco
 ## Acknowledgements
 We would like to express our gratitude to the open-source community and all the contributors who have made their libraries, frameworks, and tools available for use in this project. We also extend our thanks to our mentors and advisors for their guidance and support throughout the development process.
 
-## Note:
-This project was developed for the Sasataticket Hakathon 2023
